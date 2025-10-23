@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bucin Sesuku ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #2b1055, #7597de);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 650px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #ffd6e8;
+    }
+
+    p {
+      text-align: center;
+      color: #ddd;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .typed {
+      margin-top: 10px;
+      font-size: 18px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      color: #fff;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      min-height: 120px;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: 600;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .next {
+      background: linear-gradient(90deg, #ff6b9f, #ffb6d9);
+      color: #2d0036;
+    }
+
+    .spirit {
+      background: linear-gradient(90deg, #7dd3fc, #38bdf8);
+      color: #0f172a;
+    }
+
+    .reset {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff6b9f;
+      transform: rotate(-45deg);
+      animation: floatUp 5s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff6b9f;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 10px;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(-45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-600px) rotate(-45deg);
+        opacity: 0;
+      }
+    }
+
+    .photo {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 15px;
+      object-fit: cover;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      animation: floatPhoto 15s linear infinite;
+      z-index: 1;
+      opacity: 0.85;
+    }
+
+    @keyframes floatPhoto {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(30px, -40px) rotate(10deg); }
+      100% { transform: translate(-20px, 0) rotate(-10deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Hai Cintaku 💞</h1>
+    <p>klik pelan-pelan ya... biar tiap katanya bisa nyentuh hatimu 🌸</p>
+
+    <div class="typed" id="typed"></div>
+
+    <div class="buttons">
+      <button class="next" id="next">Lanjut ❤️</button>
+      <button class="spirit" id="spirit">Kata Cinta 💫</button>
+      <button class="reset" id="reset">Ulang 🔁</button>
+    </div>
+  </div>
+
+  <script>
+    // daftar foto — ganti URL ini pakai foto dia kalau mau
+    const photoURLs = [
+      "yaaaaaa.jpg",
+      "yaaaaaa.jpg",
+      "yaaaaaa.jpg",
+      "yaaaaaa.jpg"
+    ];
+
+    const messages = [
+      "Setiap kali aku lihat wajahmu, aku ngerasa dunia ini nggak sekelam itu lagi 💖",
+      "Cinta ini nggak butuh alasan, dia tumbuh begitu aja... kayak senja yang tiba-tiba indah 🌅",
+      "Kamu itu rumah, tempat di mana hati ini pengen pulang terus 💞",
+      "Aku cinta kamu — bukan karena siapa kamu, tapi karena siapa aku waktu bersamamu 💫",
+      "I love you, in ways even the stars can’t describe ✨"
+    ];
+
+    const spiritWords = [
+      "Kalau hari ini berat, ingat ya… kamu punya seseorang yang percaya sama kamu sepenuhnya ❤️",
+      "Cinta sejati itu bukan tentang selalu bersama, tapi tentang selalu mendoakan walau jauh 🌙",
+      "Kamu layak dicintai, disayangi, dan dipeluk oleh semesta 🌸",
+      "I love you not only for what you are, but for what I am when I am with you 💞"
+    ];
+
+    const typed = document.getElementById("typed");
+    const nextBtn = document.getElementById("next");
+    const spiritBtn = document.getElementById("spirit");
+    const resetBtn = document.getElementById("reset");
+    let index = 0;
+    let isTyping = false;
+
+    function sleep(ms) {
+      return new Promise((res) => setTimeout(res, ms));
+    }
+
+    async function typeText(text) {
+      isTyping = true;
+      typed.textContent = "";
+      for (let i = 0; i < text.length; i++) {
+        typed.textContent += text[i];
+        await sleep(40 + Math.random() * 25);
+      }
+      isTyping = false;
+    }
+
+    nextBtn.addEventListener("click", async () => {
+      if (isTyping) return;
+      if (index < messages.length) {
+        await typeText(messages[index]);
+        makeHearts(8);
+        index++;
+      } else {
+        typed.textContent = "Udah habis... tapi rasa sayang ini nggak akan pernah habis 💗🌙";
+        makeHearts(10);
+      }
+    });
+
+    spiritBtn.addEventListener("click", async () => {
+      if (isTyping) return;
+      const text = spiritWords[Math.floor(Math.random() * spiritWords.length)];
+      await typeText(text);
+      makeHearts(12);
+    });
+
+    resetBtn.addEventListener("click", () => {
+      index = 0;
+      typed.textContent = "";
+      document.querySelectorAll(".heart").forEach((h) => h.remove());
+    });
+
+    function makeHearts(count) {
+      for (let i = 0; i < count; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.bottom = "0px";
+        heart.style.animationDuration = 4 + Math.random() * 2 + "s";
+        heart.style.background = `hsl(${Math.random() * 40 + 340}, 80%, 70%)`;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
+    }
+
+    // munculkan foto otomatis
+    function showPhotos() {
+      photoURLs.forEach(url => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.classList.add("photo");
+        img.style.left = Math.random() * 90 + "vw";
+        img.style.top = Math.random() * 80 + "vh";
+        img.style.animationDuration = 10 + Math.random() * 10 + "s";
+        document.body.appendChild(img);
+      });
+    }
+
+    // saat halaman dibuka
+    window.onload = () => {
+      showPhotos();
+      typeText(messages[0]);
+      index = 1;
+      makeHearts(5);
+    };
+  </script>
+</body>
+</html>
